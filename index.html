@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpha India Invitation Generator</title>
+    <title>Alpha India Invitation Generator - 2 Pages</title>
     <style>
         :root {
             --alpha-red: #c8102e;
@@ -54,11 +54,13 @@
             align-self: flex-end;
         }
 
-        /* Page Preview */
-        .page-container {
+        /* Page Preview Container */
+        .preview-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: 40px 0;
+            gap: 40px;
         }
 
         .a4-page {
@@ -70,7 +72,7 @@
             overflow: hidden;
         }
 
-        /* Background Image */
+        /* Background Layers */
         .background-layer {
             position: absolute;
             top: 0; left: 0;
@@ -83,7 +85,7 @@
             object-fit: fill;
         }
 
-        /* Content Layer */
+        /* Page 1 Content */
         .content-layer {
             position: relative;
             z-index: 2;
@@ -112,16 +114,8 @@
             margin-bottom: -13px;
         }
         
-        .sig-details {
-            line-height: 1.4;
-        }
-        
-        .sig-name { 
-            font-weight: bold; 
-            font-size: 10.5pt;
-            color: #000;
-        }
-
+        .sig-details { line-height: 1.4; }
+        .sig-name { font-weight: bold; font-size: 10.5pt; color: #000; }
         .edit-highlight { color: var(--alpha-red); font-weight: bold; }
 
         @media print {
@@ -131,8 +125,13 @@
             }
             body { background: none; }
             .controls { display: none; }
-            .page-container { padding: 0; }
-            .a4-page { box-shadow: none; margin: 0; overflow: hidden; max-height: 297mm; }
+            .preview-container { padding: 0; gap: 0; }
+            .a4-page { 
+                box-shadow: none; 
+                margin: 0; 
+                overflow: hidden; 
+                page-break-after: always;
+            }
         }
     </style>
 </head>
@@ -163,14 +162,13 @@
         <label>Deadline Date</label>
         <input type="text" id="in-deadline" value="March 15, 2026" oninput="sync()">
     </div>
-    <button class="btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+    <button class="btn-print" onclick="window.print()">🖨️ Print / Save 2-Page PDF</button>
 </div>
 
-<div class="page-container">
-    <div class="a4-page" id="printable">
-        
+<div class="preview-container">
+    <div class="a4-page" id="page-1">
         <div class="background-layer">
-            <img id="bg-img" src="https://res.cloudinary.com/dz2stle0m/image/upload/v1772169102/DOCUMENT_AAC_2026-08_ub2nh8.jpg">
+            <img src="https://res.cloudinary.com/dz2stle0m/image/upload/v1772169102/DOCUMENT_AAC_2026-08_ub2nh8.jpg">
         </div>
 
         <div class="content-layer">
@@ -203,7 +201,7 @@
             <p>In His Service,</p>
 
             <div class="signature-block">
-                <img id="sig-img" src="https://res.cloudinary.com/dz2stle0m/image/upload/v1772169154/Thomas_fymgnt.png" class="sig-img">
+                <img src="https://res.cloudinary.com/dz2stle0m/image/upload/v1772169154/Thomas_fymgnt.png" class="sig-img">
                 <div class="sig-details">
                     <p class="sig-name">Thomas Ernest</p>
                     <p>National Director</p>
@@ -212,20 +210,26 @@
             </div>
         </div>
     </div>
+
+    <div class="a4-page" id="page-2">
+        <div class="background-layer">
+            <img src="https://res.cloudinary.com/dz2stle0m/image/upload/v1773200773/04_neqk1c.jpg">
+        </div>
+    </div>
 </div>
 
 <script>
     function sync() {
-        // Date update
-        document.getElementById('out-date').innerText = document.getElementById('in-date').value || 'March 1, 2026';
-        
-        // Name, Church, and Region updates
+        // Get input values
+        const date = document.getElementById('in-date').value;
         const title = document.getElementById('in-title').value;
         const name = document.getElementById('in-name').value;
         const church = document.getElementById('in-church').value;
         const region = document.getElementById('in-region').value;
         const deadline = document.getElementById('in-deadline').value;
         
+        // Sync to output
+        document.getElementById('out-date').innerText = date || 'March 1, 2026';
         document.getElementById('out-name').innerText = name || '[Name of Invitee]';
         document.getElementById('out-church').innerText = church || '[Name of Church/Organisation]';
         document.getElementById('out-region').innerText = region || '[Region]';
